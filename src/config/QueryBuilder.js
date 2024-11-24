@@ -17,6 +17,9 @@ class QueryBuilder {
         return this;
     }
 
+    /**
+     * @param {string} tableName
+    */
     tableName(tableName) {
         if (this.isSelect) {
             this.query += "FROM " + tableName + " ";
@@ -27,6 +30,9 @@ class QueryBuilder {
         return this;
     }
 
+    /**
+     * @param {string[]} params
+    */
     columns(params) {
         let base = "";
 
