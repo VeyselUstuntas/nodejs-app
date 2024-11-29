@@ -1,4 +1,4 @@
-const Database = require("../config/database.js");
+const Database = require("../core/database.js");
 const QueryBuilder = require("../core/model/QueryBuilder.js");
 const User = require("../models/User.js");
 class UserService {

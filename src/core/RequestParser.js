@@ -5,7 +5,7 @@ class RequestParser{
      * @return {BaseRequest}
      */
     static parse(req){
-        let request = new BaseRequest();
+        const request = new BaseRequest();
         request.method = req.method;
         request.path = req.url;
         return request;

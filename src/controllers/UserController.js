@@ -14,12 +14,14 @@ class UserController {
     /**
      * @returns {User[]}
     */
-    getAllUser(){
+    getAllUser() {
         /**
          * @type {User[]}
         */
         let userList = this.UserService.getAllUser();
-        return JSON.stringify(userList);
+        console.log("Çalıştı.");
+
+        console.log(JSON.stringify(userList));
     }
 
 }

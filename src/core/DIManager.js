@@ -1,19 +1,17 @@
+
 class DIManager {
     /**
      * @type Object[]
     */
-    #instances;
-    constructor() {
-        this.#instances = [];
-    }
+    static instances = [];
 
     /**
      * @param {string} className
      * @return {Object|null}
     */
-    findInstance(className) {
+    static findInstance(className) {
         let instanceResult = null;
-        this.#instances.forEach((instance) => {
+        DIManager.instances.forEach((instance) => {
             if (instance.constructor.name == className) {
                 instanceResult = instance;
             }
@@ -22,11 +20,11 @@ class DIManager {
     }
 
 
-    resolve(className) {
+    static resolve(className) {
         /**
          * @type {Object|null}
         */
-        let instance = this.findInstance(className);
+        let instance = DIManager.findInstance(className);
         console.log("DIManager/resolve instance:", instance);
 
         if (instance !== null) {
@@ -34,19 +32,21 @@ class DIManager {
         }
 
         let constructor = Reflect.has(className, "constructor");
+        console.log("prp:",Reflect.get(className));
 
         if (constructor === false) {
             let newInstance = Reflect.construct(className);
-            this.#instances.push(newInstance);
+            DIManager.instances.push(newInstance);
             return newInstance;
         }
 
         let parameters = Reflect.ownKeys(className);
-        console.log("PARAMETERS:",parameters.length);
+        console.log("PARAMETERS:",parameters);
+
 
         if (parameters.length === 0) {
             let newInstance = Reflect.construct(className);
-            this.#instances.push(newInstance);
+            DIManager.instances.push(newInstance);
             return newInstance;
         }
 
@@ -58,13 +58,13 @@ class DIManager {
 
             if (typeof param === 'function') { // parametrenin class olup olmadığı kontrolü
                 console.log("DIManager/resolve recursive param:",param);
-                newInstanceParams.push(this.resolve(param));
+                newInstanceParams.push(DIManager.resolve(param));
             }
         });
 
 
         let generatedInstance = Reflect.construct(className, newInstanceParams);
-        this.#instances.push(generatedInstance);
+        DIManager.instances.push(generatedInstance);
 
 
         console.log("DIManager/resolve return instance:", generatedInstance);

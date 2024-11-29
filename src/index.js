@@ -6,12 +6,12 @@ const DIManager = require('./core/DIManager.js');
 const UserController = require("./controllers/UserController.js");
 
 const server = http.createServer((req, res) => {
-    let request = RequestParser.parse(req);
-    let diManager = new DIManager();
-    let router = new Router(diManager);
+    const request = RequestParser.parse(req);
+    let router = new Router();
 
-    console.log(UserController.length);
     Router.get("users", [UserController, "getAllUser"]);
+
+    
 
 
     router.route(request);

@@ -5,29 +5,16 @@ const DIManager = require("./DIManager.js");
 class Router {
 
     /**
-    * @type {DIManager}
-    */
-    static diManager = null;
-
-    /**
     * @type {Route[]}
     */
-    static routeArray = null;
-
-
-    /**
-     * @param {DIManager} diManager 
-    */
-    constructor(diManager) {
-        Router.diManager = diManager;
-    }
+    static routes = [];
 
     /**
      * @param {string} path 
      * @param {Array} callable 
     */
     static get(path, callable) {
-        this.register(path, callable, 'GET');
+        Router.register(path, callable, 'GET');
     }
 
     /**
@@ -35,7 +22,7 @@ class Router {
      * @param {Array} callable 
     */
     static post(path, callable) {
-        this.register(path, callable, 'POST');
+        Router.register(path, callable, 'POST');
     }
 
 
@@ -45,13 +32,13 @@ class Router {
      * @param {string} method 
     */
     static register(path, callable, method) {
-        console.log("router/register/callable0 ", callable[0]);
-        let controller = this.diManager.resolve(callable[0]);
+        // console.log("router/register/callable0 ", callable[0]);
+        let controller = DIManager.resolve(callable[0]);
         let action = callable[1];
 
         let route = new Route(path, [controller, action], method);
-        console.log(route);
-        this.routeArray.push(route);
+        // console.log(route);
+        Router.routes.push(route);
     }
 
     /**
@@ -61,9 +48,15 @@ class Router {
         let method = request.method;
         let page = request.path;
 
-        this.routeArray.forEach(item => {
-            if (item.path === method && item.path === page) {
-                console.log("burda çözümlenecek ve çalışacak.");
+        Router.routes.forEach(item => {
+            if (item.method === method && item.path === page) {
+                // console.log("burda çözümlenecek ve çalışacak.");
+                let controller = item.callable[0];
+                let action = item.callable[1];
+
+                let instance = new controller();
+                const deneme = instance[action]();
+                console.log(deneme);
             }
         })
     }
