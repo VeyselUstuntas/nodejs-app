@@ -1,14 +1,25 @@
 const Route = require("./model/Route.js");
 const BaseRequest = require("./model/BaseRequest.js");
+const DIManager = require("./DIManager.js");
 
 class Router {
-    "use strict";
 
-    constructor() {
-        /**
-         * @type {Route[]}
-        */
-        this.routeArray = [];
+    /**
+    * @type {DIManager}
+    */
+    static diManager = null;
+
+    /**
+    * @type {Route[]}
+    */
+    static routeArray = null;
+
+
+    /**
+     * @param {DIManager} diManager 
+    */
+    constructor(diManager) {
+        Router.diManager = diManager;
     }
 
     /**
@@ -34,9 +45,12 @@ class Router {
      * @param {string} method 
     */
     static register(path, callable, method) {
-        let controller = callable[0];
+        console.log("router/register/callable0 ", callable[0]);
+        let controller = this.diManager.resolve(callable[0]);
         let action = callable[1];
+
         let route = new Route(path, [controller, action], method);
+        console.log(route);
         this.routeArray.push(route);
     }
 
