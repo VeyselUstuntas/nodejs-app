@@ -1,6 +1,6 @@
 const http = require('http');
 const Database = require('./config/Database.js');
-const QueryBuilder = require('./config/QueryBuilder.js');
+const QueryBuilder = require('./core/model/QueryBuilder.js');
 
 const server = http.createServer((req, res) => {
     var connection = new Database();
@@ -9,9 +9,10 @@ const server = http.createServer((req, res) => {
 
     const sql = queryBuilder.select().columns(["*"]).tableName("user").where(["id"]).getQuery();
     console.log(sql);
-    connection.connection.query(sql, [5],(err, result) => {
+    connection.connection.query(sql, [5], (err, result) => {
         if (err) {
             console.log(err);
+
         }
         else {
             for (var i = 0; i < result.length; i++) {
