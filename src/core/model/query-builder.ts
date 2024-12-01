@@ -1,26 +1,27 @@
-class QueryBuilder {
+export class QueryBuilder {
+    public query: string;
+    private isInsert: boolean;
+    private isSelect: boolean;
+
     constructor() {
         this.query = "";
         this.isInsert = false;
         this.isSelect = false;
     }
 
-    select() {
+    select(): this {
         this.isSelect = true;
         this.query += "SELECT ";
         return this;
     }
 
-    insert() {
+    insert(): this {
         this.isInsert = true;
         this.query += "INSERT INTO ";
         return this;
     }
 
-    /**
-     * @param {string} tableName
-    */
-    tableName(tableName) {
+    tableName(tableName: string): this {
         if (this.isSelect) {
             this.query += "FROM " + tableName + " ";
             return this;
@@ -30,10 +31,7 @@ class QueryBuilder {
         return this;
     }
 
-    /**
-     * @param {string[]} params
-    */
-    columns(params) {
+    columns(params: string[]): this {
         let base = "";
 
         if (this.isSelect) {
@@ -66,11 +64,7 @@ class QueryBuilder {
         }
     }
 
-    /**
-     * @param {string[]} params
-     * @param {string|null} operator
-    */
-    where(params, operator = null) {
+    where(params: string[], operator: string | null = null): this {
         let base = "WHERE ";
 
         const paramSize = params.length;
@@ -90,13 +84,11 @@ class QueryBuilder {
         return this;
     }
 
-    getQuery() {
-        const chainedQuery = this.query;
+    getQuery(): string {
+        const chainedQuery: string = this.query;
         this.isSelect = false;
         this.isInsert = false;
         this.query = "";
         return chainedQuery;
     }
 }
-
-module.exports = QueryBuilder;

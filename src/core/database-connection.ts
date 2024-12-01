@@ -1,29 +1,17 @@
-const mysql = require('mysql2');
+import mysql from 'mysql2';
 
-class Database {
+export class DatabaseConnection {
+    private host: string;
+    private database: string;
+    private user: string;
+    private password: string;
+    private connection: mysql.Connection;
+
     constructor() {
-        /**
-         * @type {string} 
-        */
         this.host = "localhost";
-
-        /**
-         * @type {string} 
-        */
         this.user = "root";
-
-        /**
-         * @type {string} 
-        */
         this.password = "";
-        /**
-         * @type {string} 
-        */
         this.database = "storedb";
-
-        /**
-         * @type {import('mysql2').Connection}
-        */
         this.connection = mysql.createConnection(
             {
                 host: this.host,
@@ -34,5 +22,10 @@ class Database {
         );
     }
 
+    async getConnection(): Promise<mysql.Connection> {
+        return new Promise((resolve, reject) => {
+            resolve(this.connection);
+        });
+    }
+
 }
-module.exports = Database;
